@@ -1,6 +1,6 @@
 FROM alpine:3.17.0 AS builder
 
-ARG CMAK_VERSION="3.0.0.5"
+ARG CMAK_VERSION="3.0.0.6"
 
 RUN wget "https://github.com/yahoo/CMAK/releases/download/${CMAK_VERSION}/cmak-${CMAK_VERSION}.zip" \
     && unzip cmak-${CMAK_VERSION}.zip \
