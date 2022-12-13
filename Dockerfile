@@ -14,5 +14,7 @@ WORKDIR /cmak
 
 EXPOSE 9000
 
+HEALTHCHECK --interval=30s --timeout=5s CMD curl -f http://localhost:9000/api/health || exit 1
+
 ENTRYPOINT ["bin/cmak"]
 CMD ["-Dconfig.file=conf/application.conf", "-Dhttp.port=9000"]
