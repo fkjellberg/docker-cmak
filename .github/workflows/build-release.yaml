@@ -1,10 +1,13 @@
-name: Build release and push to DockerHub
+name: Build release and push to Docker Hub
 
 # Trigger on release
 on:
   release:
     types:
       - released
+
+env:
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/cmak
 
 jobs:
   build:
@@ -17,7 +20,7 @@ jobs:
         id: docker-metadata
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKERHUB_USERNAME }}/cmak
+          images: ${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest
             type=match,pattern=v?(.*),group=1
@@ -44,3 +47,11 @@ jobs:
             linux/arm64
           push: true
           tags: ${{ steps.docker-metadata.outputs.tags }}
+
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ env.IMAGE_NAME }}
+          readme-filepath: ./README.md
